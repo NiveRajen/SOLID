@@ -8,25 +8,30 @@
 import SwiftUI
 import Combine
 
-struct ClockView<T: ClockProtocol>: View {
-    @ObservedObject var vm: T
+struct ClockView: View {
+    @StateObject private var viewModel: ClockViewModel
     
+    init(viewModel: ClockViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
     var body: some View {
         VStack {
             HStack{
-                Text(String(format: "%02d", vm.clock.hours))
+                Text(String(format: "%02d", viewModel.clock.hours))
                 Text(":")
-                Text(String(format: "%02d", vm.clock.minutes))
+                Text(String(format: "%02d", viewModel.clock.minutes))
                 Text(":")
-                Text(String(format: "%02d", vm.clock.seconds))
+                Text(String(format: "%02d", viewModel.clock.seconds))
             }
             .font(.largeTitle)
             .monospaced()
+            
+            Text(viewModel.isLeapYear())
         }
         .padding()
     }
 }
 
 #Preview {
-    ClockView(vm: ClockViewModel(clock: Clock()))
+    ClockView(viewModel: ClockViewModel(clockManager: ClockManager()))
 }

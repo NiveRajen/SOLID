@@ -4,22 +4,32 @@
 //
 //  Created by Nivedha Rajendran on 12.10.24.
 //
-
 import Foundation
+import Combine
 
-//The Open-Closed Principle requires that entities(classes, functions, etc) should be open for extension and closed for modification.
-//this principle says, we should be able to add new functionality without touching the existing code.
-//Here, we don't have to change any code inside the update function of Clockprotocol, we can override the update method in the extended classes
 
+//SRP: ClockManager handles the data operations, such as updating clock from storage (in this case, in-memory), check if leap year. It encapsulates the data layer.
 class ClockManager: ClockProtocol {
-    @Published var clock = Clock()
+    
+    private var clock = Clock()
     
     
-    func update() {
+    func update() -> Clock {
         let date = Date()
+        
         clock.hours = Calendar.current.component(.hour, from: date)
         clock.minutes = Calendar.current.component(.minute, from: date)
         clock.seconds = Calendar.current.component(.second, from: date)
+        
+        return clock
     }
+    
+    
+    func isLeapYear() -> Bool {
+        let year = Calendar.current.component(.year, from: Date())
+        
+        return year % 4 == 0
+    }
+    
+    
 }
-

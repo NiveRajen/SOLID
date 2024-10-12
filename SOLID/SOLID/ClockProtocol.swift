@@ -8,20 +8,17 @@
 import Foundation
 import Combine
 
-protocol ClockProtocol: ObservableObject {
-    
-    var clock: Clock { set get }
-    
-    func update()
-}
+//The Open-Closed Principle requires that entities(classes, functions, etc) should be open for extension and closed for modification.
+//this principle says, we should be able to add new functionality inside ClockManager or create a new class without touching the existing code in view model
 
-extension ClockProtocol {
+
+//ISP - Clients should not be forced to depend on interfaces they do not use.
+//ClockProtocol: This interface is focused on clock-related operations, ensuring that any implementation only needs to implement methods that are relevant to clock management. If you later introduce a different service with different requirements, you can create a separate interface rather than bloating a single interface.
+
+protocol ClockProtocol {
     
-    func update() {
-        let date = Date()
-        clock.hours = Calendar.current.component(.hour, from: date)
-        clock.minutes = Calendar.current.component(.minute, from: date)
-        clock.seconds = Calendar.current.component(.second, from: date)
-    }
+    func update() -> Clock
+    
+    func isLeapYear() -> Bool
 }
 

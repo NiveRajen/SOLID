@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            ClockView(vm: ClockViewModel(clock: Clock()))
+            ClockView(viewModel: ClockViewModel(clockManager: ClockManager()))
         }
         .padding()
     }
